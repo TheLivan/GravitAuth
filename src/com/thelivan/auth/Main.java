@@ -40,16 +40,10 @@ public class Main {
         }
     }
 
-    public static boolean verifyPassword(String username, String password) {
-        if (username.matches("TheLivan") && password.matches("2325gasg")) {
+    public static boolean verifyPassword(String username, String password) { // Вот тут писать логины и пароли.
+        if (username.matches("login") && password.matches("password")) {
             return true;
-        } else if (username.matches("Gamgid") && password.matches("hg24561")) {
-            return true;
-        } else if (username.matches("Ggangds") && password.matches("jjjoho")) {
-            return true;
-        } else if (username.matches("_HEADER_") && password.matches("1245hasgksh")) {
-            return true;
-        } else if (username.matches("afteh") && password.matches("Kikignag18")) {
+        } else if (username.matches("login1") && password.matches("password2")) {
             return true;
         }
         return false;
