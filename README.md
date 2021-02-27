@@ -1,7 +1,7 @@
 ### SimpleAuthProvider
 
 Простая реализация (затычка) Auth Provider.
-Для создания аккаунтов в Main#verifyPassword.
+Для создания аккаунтов загляните в Main#verifyPassword.
 
 Авторизация с этим скриптом выглядит вот так:
 ```json
