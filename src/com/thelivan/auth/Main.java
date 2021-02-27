@@ -18,17 +18,18 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class Main {
 
     public static HttpServer server;
-    public static Date date = new Date();
-    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    public static final Date DATE = new Date();
+    public static final int PORT = 8001;
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Starting server....");
-        server = HttpServer.create(new InetSocketAddress("localhost", 8001), 0);
+        doLog("Starting server....");
+        server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
-        server.createContext("/auth", new Handler());
+        server.createContext("/auth", new Main.Handler());
         server.setExecutor(threadPoolExecutor);
         server.start();
-        System.out.println("Server started on port 8001");
+        doLog("Server started on port " + PORT);
         while (true) {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             String command = "";
@@ -55,12 +56,11 @@ public class Main {
     }
 
     public static class Handler implements HttpHandler {
-
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             OutputStream outputStream = httpExchange.getResponseBody();
-            System.out.println("[" + sdf.format(Main.date) + "] " + getUsername(httpExchange) + " " + getPassword(httpExchange) + " " + getIp(httpExchange)); // Выводим лог в консоль
-            if (httpExchange.getRemoteAddress().getAddress().getHostName().matches("127.0.0.1")) return; // Проверка на левые хосты, с других хостов подключатся нельзя.
+            doLog("[" + DATE_FORMAT.format(DATE) + "] " + getUsername(httpExchange) + " " + getPassword(httpExchange) + " " + getIp(httpExchange)); // Выводим лог в консоль
+            if (httpExchange.getRemoteAddress().getAddress().getHostName().matches("127.0.0.1")) return; // С других хостов подключаться нельзя, только localhost.
             if (verifyPassword(getUsername(httpExchange), getPassword(httpExchange))) {
                 byte[] response = ("OK:" + getUsername(httpExchange) + ":0").getBytes();
                 httpExchange.sendResponseHeaders(200, response.length);
@@ -75,17 +75,21 @@ public class Main {
             outputStream.close();
             httpExchange.close();
         }
+    }
 
-        private String getUsername(HttpExchange httpExchange) {
-            return httpExchange.getRequestURI().toString().split("username=")[1].split("&")[0];
-        }
+    public static void doLog(String log) {
+        System.out.println("[Auth] " + log);
+    }
 
-        private String getIp(HttpExchange httpExchange) {
-            return httpExchange.getRequestURI().toString().split("ip=")[1];
-        }
+    public static String getUsername(HttpExchange httpExchange) {
+        return httpExchange.getRequestURI().toString().split("username=")[1].split("&")[0];
+    }
 
-        private String getPassword(HttpExchange httpExchange) {
-            return httpExchange.getRequestURI().toString().split("password=")[1].split("&")[0];
-        }
+    public static String getIp(HttpExchange httpExchange) {
+        return httpExchange.getRequestURI().toString().split("ip=")[1];
+    }
+
+    public static String getPassword(HttpExchange httpExchange) {
+        return httpExchange.getRequestURI().toString().split("password=")[1].split("&")[0];
     }
 }
