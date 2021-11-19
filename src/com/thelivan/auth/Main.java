@@ -41,9 +41,9 @@ public class Main {
     }
 
     public static boolean verifyPassword(String username, String password) { // Вот тут писать логины и пароли.
-        if (username.matches("login") && password.matches("password")) {
+        if (username.equals("login") && password.equals("password")) {
             return true;
-        } else if (username.matches("login1") && password.matches("password2")) {
+        } else if (username.equals("login1") && password.equals("password2")) {
             return true;
         }
         return false;
