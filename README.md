@@ -18,4 +18,4 @@
 ]
 ```
 
-Автор в вк - https://vk.com/badcodemylife
+Автор - https://thelivan.ru/
